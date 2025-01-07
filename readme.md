@@ -1,7 +1,6 @@
 # 图片压缩工具 | Image Compressor
 
-一个支持自定义长宽的图片压缩工具，简单、高效，适合各种图片处理需求！  
-通过 **GitHub Pages** 在线访问，无需下载，开箱即用！
+🖼️ 一款轻量级在线图片压缩工具，支持自定义尺寸、批量处理，让图片处理更简单！
 
 ## 🎯 项目简介
 
@@ -12,39 +11,59 @@
   - 帮助用户快速批量处理图片，优化图片体积和尺寸。
   - 提供开源代码，方便学习与扩展。
 
-## 🌟 功能特性
+- 🎯 自定义压缩尺寸与质量
+- 📱 移动端完美适配
+- 🔒 本地压缩，隐私安全
+- ⚡ 快速批量处理
+- 💾 一键下载保存
+- 🎨 多种图片格式支持
 
-1. **图片上传**：支持拖拽上传或点击选择文件。
-2. **分辨率设置**：自由调整宽高，支持保持原比例。
-3. **多格式支持**：JPG、PNG、WebP 等常见图片格式。
-4. **画质调整**：可选压缩质量，平衡体积与清晰度。
-5. **下载功能**：一键保存压缩后的图片。
-6. **错误提示**：上传非图片文件或超大图片时，友好提醒。
+## 🚀 立即使用
 
-## 🛠 技术栈
+👉 [在线体验](https://joytianya.github.io/image-compressor-web/)
 
-- **前端**：
-  - HTML5 + CSS3 + JavaScript
-  - Canvas API 用于图片压缩处理
-- **部署**：
-  - [GitHub Pages](https://pages.github.com/)（静态托管服务）
+无需安装，打开即用！完全免费的图片压缩工具。
 
-## 🚀 快速开始
+## 💡 核心功能
 
-### 在线访问
-👉 [点击这里立即使用](https://joytianya.github.io/image-compressor-web/)  
+### 图片处理
+- 支持JPG、PNG、WebP等主流格式
+- 自定义输出尺寸，保持原比例
+- 可调节压缩质量，平衡大小与清晰度
+- 拖拽上传，批量处理更高效
+
+### 便捷特性
+- 实时预览压缩效果
+- 一键下载处理后的图片
+- 智能错误提示
+- 界面简洁直观
+
+## 🛠️ 技术实现
+
+- **前端技术**
+  - 原生JavaScript实现核心功能
+  - Canvas API处理图片压缩
+  - 响应式设计，适配多端
+  
+- **开发部署**
+  - GitHub Pages提供在线访问
+  - 持续集成自动部署
 
 ### 本地运行
-1. 克隆仓库：
+1. 克隆仓库到本地：
    ```bash
    git clone https://github.com/your-username/image-compressor-web.git
+   ```
 
-	2.	打开项目目录并启动静态服务器：
-
-cd image-compressor-web
-open index.html
-
-或使用 VSCode 插件（如 Live Server）直接运行。
+2. 运行项目：
+   ```bash
+   cd image-compressor-web
+   # 方式一：直接打开 index.html
+   open index.html
+   
+   # 方式二：使用 VSCode Live Server 插件
+   # 右键 index.html 选择 "Open with Live Server"
+   ```
 
 🎨 使用说明
 	1.	打开网页，将图片拖拽或点击上传。
