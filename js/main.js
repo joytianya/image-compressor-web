@@ -37,11 +37,17 @@ class ImageCompressor {
         this.filterSelect = document.getElementById('filterSelect');
         this.enableWatermark = document.getElementById('enableWatermark');
         this.watermarkText = document.getElementById('watermarkText');
+        this.watermarkSize = document.getElementById('watermarkSize');
         this.watermarkColor = document.getElementById('watermarkColor');
         this.watermarkOpacity = document.getElementById('watermarkOpacity');
         this.opacityValue = document.getElementById('opacityValue');
         this.downloadAllBtn = document.getElementById('downloadAllBtn');
         this.loadingOverlay = document.querySelector('.loading-overlay');
+        this.enableResize = document.getElementById('enableResize');
+
+        // 初始化滑块背景
+        this.updateRangeBackground(this.qualityInput);
+        this.updateRangeBackground(this.watermarkOpacity);
     }
 
     bindEvents() {
@@ -55,7 +61,10 @@ class ImageCompressor {
         this.widthInput.addEventListener('input', () => this.handleDimensionChange('width'));
         this.heightInput.addEventListener('input', () => this.handleDimensionChange('height'));
         this.qualityInput.addEventListener('input', () => {
-            this.qualityValue.textContent = `${this.qualityInput.value}%`;
+            const value = this.qualityInput.value;
+            this.qualityValue.textContent = `${value}%`;
+            // 更新滑块背景
+            this.updateRangeBackground(this.qualityInput);
         });
         
         // 压缩和下载事件
@@ -66,21 +75,32 @@ class ImageCompressor {
         this.enableWatermark.addEventListener('change', () => {
             const enabled = this.enableWatermark.checked;
             this.watermarkText.disabled = !enabled;
+            this.watermarkSize.disabled = !enabled;
             this.watermarkColor.disabled = !enabled;
             this.watermarkOpacity.disabled = !enabled;
         });
 
         this.watermarkOpacity.addEventListener('input', () => {
-            this.opacityValue.textContent = `${this.watermarkOpacity.value}%`;
+            const value = this.watermarkOpacity.value;
+            this.opacityValue.textContent = `${value}%`;
+            // 更新滑块背景
+            this.updateRangeBackground(this.watermarkOpacity);
         });
 
         this.downloadAllBtn.addEventListener('click', () => this.downloadAllImages());
+
+        // 尺寸设置启用/禁用事件
+        this.enableResize.addEventListener('change', () => {
+            const enabled = this.enableResize.checked;
+            this.widthInput.disabled = !enabled;
+            this.heightInput.disabled = !enabled;
+            this.keepRatio.disabled = !enabled;
+        });
     }
 
     handleFileSelect(e) {
-        this.files.clear(); // 清除之前的文件
-        this.fileItems.innerHTML = ''; // 清除文件列表
         const files = Array.from(e.target.files);
+        if (files.length === 0) return;
         this.processFiles(files);
     }
 
@@ -93,85 +113,65 @@ class ImageCompressor {
         e.preventDefault();
         e.stopPropagation();
         
-        this.files.clear(); // 清除之前的文件
-        this.fileItems.innerHTML = ''; // 清除文件列表
         const files = Array.from(e.dataTransfer.files);
+        if (files.length === 0) return;
         this.processFiles(files);
     }
 
     processFiles(files) {
+        // 清除之前的文件和预览
+        this.files.clear();
+        const previewContainer = document.getElementById('previewContainer');
+        if (previewContainer) {
+            previewContainer.innerHTML = '';
+        }
+        
         files.forEach(file => {
-            // 检查文件类型
             if (!this.supportedFormats.includes(file.type)) {
                 this.showError(`${file.name} 格式不支持，仅支持 JPG、PNG、WebP`);
                 return;
             }
 
-            // 检查文件大小
             if (file.size > this.maxFileSize) {
                 this.showError(`${file.name} 超过大小限制 10MB`);
                 return;
             }
 
-            // 添加到文件列表
-            this.addFileToList(file);
+            // 直接添加到预览区域
+            this.addToPreview(file);
             
-            // 显示第一张图片的预览
+            // 设置第一张图片的尺寸作为默认值
             if (this.files.size === 1) {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        this.originalImage = img;
-                        this.originalPreview.src = e.target.result;
-                        this.originalInfo.textContent = 
-                            `${img.width} x ${img.height} - ${(file.size / 1024).toFixed(2)}KB`;
-                        
-                        // 设置默认的宽度和高度
-                        this.widthInput.value = img.width;
-                        this.heightInput.value = img.height;
-                    };
-                    img.src = e.target.result;
+                const img = new Image();
+                img.onload = () => {
+                    this.widthInput.value = img.width;
+                    this.heightInput.value = img.height;
                 };
-                reader.readAsDataURL(file);
+                img.src = URL.createObjectURL(file);
             }
         });
 
-        this.updateFileCount();
-        this.fileList.style.display = 'block';
-        this.settingsPanel.style.display = 'block';
+        // 上传后切换到紧凑模式
+        this.dropZone.classList.add('compact');
+        
+        // 显示预览区域
+        const previewSection = document.querySelector('.preview-section');
+        if (previewSection) {
+            previewSection.style.display = 'block';
+        }
     }
 
-    addFileToList(file) {
-        const fileId = Date.now() + Math.random();
+    addToPreview(file) {
+        // 创建并添加预览组
+        const previewGroup = this.createPreviewGroup(file);
+        // 使用预览组的 data-file-id 作为文件ID
+        const fileId = previewGroup.dataset.fileId;
         this.files.set(fileId, file);
 
-        const fileItem = document.createElement('div');
-        fileItem.className = 'file-item';
-        fileItem.dataset.fileId = fileId;
-
-        // 创建预览图
-        const reader = new FileReader();
-        reader.onload = (e) => {
-            fileItem.innerHTML = `
-                <img src="${e.target.result}" alt="${file.name}">
-                <div class="file-info">
-                    <div class="file-name">${file.name}</div>
-                    <div class="file-size">${this.formatFileSize(file.size)}</div>
-                </div>
-                <span class="remove-file">×</span>
-            `;
-
-            // 绑定删除事件
-            fileItem.querySelector('.remove-file').addEventListener('click', () => {
-                this.files.delete(fileId);
-                fileItem.remove();
-                this.updateFileCount();
-            });
-        };
-        reader.readAsDataURL(file);
-
-        this.fileItems.appendChild(fileItem);
+        const previewContainer = document.getElementById('previewContainer');
+        if (previewContainer) {
+            previewContainer.appendChild(previewGroup);
+        }
     }
 
     updateFileCount() {
@@ -186,12 +186,21 @@ class ImageCompressor {
 
         try {
             for (const [fileId, file] of this.files) {
+                // 找到对应的预览组
+                const previewGroup = document.querySelector(`.image-preview[data-file-id="${fileId}"]`);
+                if (!previewGroup) continue;
+
                 const result = await this.processImage(file);
                 await this.applyFilters(result);
                 if (this.enableWatermark.checked) {
                     await this.addWatermark(result);
                 }
-                this.updateCompressedPreview(result);
+                this.updateCompressedPreview(result, previewGroup);
+            }
+            // 显示下载按钮
+            this.downloadBtn.style.display = 'inline-block';
+            if (this.files.size > 1) {
+                this.downloadAllBtn.style.display = 'inline-block';
             }
         } catch (error) {
             this.showError(error.message);
@@ -209,8 +218,9 @@ class ImageCompressor {
                     const canvas = document.createElement('canvas');
                     const ctx = canvas.getContext('2d');
                     
-                    let width = parseInt(this.widthInput.value) || img.width;
-                    let height = parseInt(this.heightInput.value) || img.height;
+                    // 只有在启用尺寸调整时才使用自定义尺寸
+                    let width = this.enableResize.checked ? (parseInt(this.widthInput.value) || img.width) : img.width;
+                    let height = this.enableResize.checked ? (parseInt(this.heightInput.value) || img.height) : img.height;
                     
                     canvas.width = width;
                     canvas.height = height;
@@ -275,11 +285,12 @@ class ImageCompressor {
         const text = this.watermarkText.value;
         const color = this.watermarkColor.value;
         const opacity = parseInt(this.watermarkOpacity.value) / 100;
+        const fontSize = parseInt(this.watermarkSize.value) || 20;
 
         ctx.save();
         ctx.globalAlpha = opacity;
         ctx.fillStyle = color;
-        ctx.font = '20px Arial';
+        ctx.font = `${fontSize}px Arial`;
         ctx.textAlign = 'right';
         ctx.textBaseline = 'bottom';
         ctx.fillText(text, canvas.width - 10, canvas.height - 10);
@@ -350,21 +361,19 @@ class ImageCompressor {
         return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
     }
 
-    updateCompressedPreview(canvas) {
-        // 根据不同格式使用不同的压缩参数
+    updateCompressedPreview(canvas, previewGroup) {
         const format = this.formatSelect.value;
         const quality = parseInt(this.qualityInput.value) / 100;
-        
-        // 对于PNG格式，使用较高的质量值以保持透明度
         const compressionQuality = format === 'image/png' ? 1 : quality;
 
         canvas.toBlob((blob) => {
             this.compressedBlob = blob;
             const url = URL.createObjectURL(blob);
-            this.compressedPreview.src = url;
-            this.compressedInfo.textContent = 
+            const compressedImg = previewGroup.querySelector('.compressed img');
+            const compressedInfo = previewGroup.querySelector('.compressed .image-info');
+            compressedImg.src = url;
+            compressedInfo.textContent = 
                 `${canvas.width} x ${canvas.height} - ${(blob.size / 1024).toFixed(2)}KB`;
-            this.downloadBtn.style.display = 'inline-block';
         }, format, compressionQuality);
     }
 
@@ -376,6 +385,88 @@ class ImageCompressor {
         const format = this.formatSelect.value.split('/')[1];
         link.download = `compressed_image.${format}`;
         link.click();
+    }
+
+    clearPreviews() {
+        const existingContainer = this.settingsPanel.querySelector('.preview-container');
+        if (existingContainer) {
+            existingContainer.remove();
+        }
+    }
+
+    createPreviewGroup(file) {
+        const group = document.createElement('div');
+        group.className = 'image-preview';
+        const fileId = Date.now() + Math.random();
+        group.dataset.fileId = fileId;
+        
+        const titleDiv = document.createElement('div');
+        titleDiv.className = 'preview-title';
+        titleDiv.textContent = file.name;
+        group.appendChild(titleDiv);
+
+        const previewContainer = document.createElement('div');
+        previewContainer.className = 'preview-images';
+        
+        const originalDiv = document.createElement('div');
+        originalDiv.className = 'original';
+        originalDiv.innerHTML = `
+            <h3>原图</h3>
+            <img class="preview-img">
+            <div class="image-info"></div>
+        `;
+        
+        const compressedDiv = document.createElement('div');
+        compressedDiv.className = 'compressed';
+        compressedDiv.innerHTML = `
+            <h3>压缩后</h3>
+            <img class="preview-img">
+            <div class="image-info"></div>
+        `;
+        
+        previewContainer.appendChild(originalDiv);
+        previewContainer.appendChild(compressedDiv);
+        group.appendChild(previewContainer);
+
+        // 显示原图预览
+        const previewImg = originalDiv.querySelector('img');
+        const url = URL.createObjectURL(file);
+        
+        // 先创建一个临时图片来获取实际尺寸
+        const tempImg = new Image();
+        tempImg.onload = () => {
+            const width = tempImg.naturalWidth;
+            const height = tempImg.naturalHeight;
+            
+            // 更新预览图和信息
+            previewImg.src = url;
+            originalDiv.querySelector('.image-info').textContent = 
+                `${width} x ${height} - ${(file.size / 1024).toFixed(2)}KB`;
+            
+            // 如果是第一张图片，设置为默认尺寸
+            if (this.files.size === 1) {
+                this.widthInput.value = width;
+                this.heightInput.value = height;
+            }
+            
+            // 清理临时对象
+            URL.revokeObjectURL(url);
+        };
+        tempImg.src = url;
+
+        return group;
+    }
+
+    // 添加新方法：更新滑块背景
+    updateRangeBackground(rangeInput) {
+        const value = rangeInput.value;
+        const max = rangeInput.max;
+        const percentage = (value / max) * 100;
+        rangeInput.style.background = `linear-gradient(to right, 
+            var(--primary-color) 0%, 
+            var(--primary-color) ${percentage}%, 
+            var(--border-color) ${percentage}%, 
+            var(--border-color) 100%)`;
     }
 }
 

@@ -17,113 +17,119 @@
         </header>
 
         <main class="app-main">
-            <div class="upload-area card-shadow" id="dropZone">
-                <input type="file" id="fileInput" accept="image/*" multiple hidden>
-                <div class="upload-hint">
-                    <i class="ri-upload-cloud-2-line"></i>
-                    <p>拖拽图片到这里 或 点击上传</p>
-                    <p class="upload-limits">支持 JPG、PNG、WebP 格式，单文件最大 10MB</p>
-                    <button id="uploadBtn" class="btn-primary">
-                        <i class="ri-image-add-line"></i> 选择图片
-                    </button>
-                </div>
-            </div>
-
-            <div class="file-list card-shadow" id="fileList" style="display: none;">
-                <h3>待处理图片 (<span id="fileCount">0</span>)</h3>
-                <div class="file-items" id="fileItems"></div>
-            </div>
-
-            <div class="settings-panel card-shadow" style="display: none;">
-                <div class="image-preview">
-                    <div class="original">
-                        <h3>原图</h3>
-                        <img id="originalPreview">
-                        <div class="image-info" id="originalInfo"></div>
+            <div class="main-content">
+                <div class="left-panel">
+                    <div class="upload-area card-shadow compact" id="dropZone">
+                        <input type="file" id="fileInput" accept="image/*" multiple hidden>
+                        <div class="upload-hint">
+                            <button id="uploadBtn" class="btn-primary">
+                                <i class="ri-image-add-line"></i> 选择图片
+                            </button>
+                            <p class="upload-limits">支持 JPG、PNG、WebP，最大 10MB</p>
+                        </div>
                     </div>
-                    <div class="compressed">
-                        <h3>压缩后</h3>
-                        <img id="compressedPreview">
-                        <div class="image-info" id="compressedInfo"></div>
+
+                    <div class="preview-section card-shadow">
+                        <div class="preview-scroll">
+                            <div class="preview-container" id="previewContainer">
+                                <!-- 预览内容将动态插入这里 -->
+                            </div>
+                        </div>
                     </div>
                 </div>
 
-                <div class="format-settings">
-                    <h3>输出格式</h3>
-                    <div class="input-group">
-                        <select id="formatSelect">
-                            <option value="image/jpeg">JPG</option>
-                            <option value="image/png">PNG</option>
-                            <option value="image/webp">WebP</option>
-                        </select>
-                    </div>
-                </div>
+                <div class="right-panel card-shadow">
+                    <div class="settings-panel">
+                        <h3 class="settings-title">压缩设置</h3>
+                        
+                        <div class="settings-group">
+                            <h4>输出格式</h4>
+                            <select id="formatSelect" class="styled-select">
+                                <option value="image/jpeg">JPG</option>
+                                <option value="image/png">PNG</option>
+                                <option value="image/webp">WebP</option>
+                            </select>
+                        </div>
 
-                <div class="watermark-settings">
-                    <h3>水印设置</h3>
-                    <div class="input-group">
-                        <label>
-                            <input type="checkbox" id="enableWatermark">
-                            启用水印
-                        </label>
-                        <input type="text" id="watermarkText" placeholder="水印文字" disabled>
-                        <input type="color" id="watermarkColor" value="#000000" disabled>
-                        <input type="range" id="watermarkOpacity" min="0" max="100" value="50" disabled>
-                        <span id="opacityValue">50%</span>
-                    </div>
-                </div>
+                        <div class="settings-group">
+                            <h4>尺寸设置</h4>
+                            <label class="checkbox-label">
+                                <input type="checkbox" id="enableResize">
+                                <span>启用尺寸调整</span>
+                            </label>
+                            <div class="dimension-inputs">
+                                <input type="number" id="widthInput" placeholder="宽度" disabled>
+                                <span>×</span>
+                                <input type="number" id="heightInput" placeholder="高度" disabled>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="keepRatio" checked disabled>
+                                    <span>保持比例</span>
+                                </label>
+                            </div>
+                        </div>
 
-                <div class="filter-settings">
-                    <h3>滤镜效果</h3>
-                    <div class="input-group">
-                        <select id="filterSelect">
-                            <option value="none">无</option>
-                            <option value="grayscale">黑白</option>
-                            <option value="sepia">复古</option>
-                            <option value="blur">模糊</option>
-                        </select>
-                    </div>
-                </div>
+                        <div class="settings-group">
+                            <h4>压缩质量</h4>
+                            <div class="quality-control">
+                                <div class="quality-description">降低质量可以减小文件大小，但可能影响图片清晰度</div>
+                                <div class="quality-slider">
+                                    <input type="range" id="qualityInput" min="0" max="100" value="80">
+                                    <span id="qualityValue">80%</span>
+                                </div>
+                            </div>
+                        </div>
 
-                <div class="size-settings">
-                    <h3>尺寸设置</h3>
-                    <div class="input-group">
-                        <label>
-                            宽度:
-                            <input type="number" id="widthInput" placeholder="像素">
-                        </label>
-                        <label>
-                            高度:
-                            <input type="number" id="heightInput" placeholder="像素">
-                        </label>
-                        <label>
-                            <input type="checkbox" id="keepRatio" checked>
-                            保持宽高比
-                        </label>
-                    </div>
-                </div>
+                        <div class="settings-group">
+                            <h4>滤镜效果</h4>
+                            <select id="filterSelect" class="styled-select">
+                                <option value="none">无</option>
+                                <option value="grayscale">黑白</option>
+                                <option value="sepia">复古</option>
+                                <option value="blur">模糊</option>
+                            </select>
+                        </div>
 
-                <div class="quality-settings">
-                    <h3>质量设置</h3>
-                    <div class="input-group">
-                        <label>
-                            压缩质量:
-                            <input type="range" id="qualityInput" min="0" max="100" value="80">
-                            <span id="qualityValue">80%</span>
-                        </label>
-                    </div>
-                </div>
+                        <div class="settings-group">
+                            <h4>水印设置</h4>
+                            <div class="watermark-controls">
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="enableWatermark">
+                                    <span>启用水印</span>
+                                </label>
+                                <input type="text" id="watermarkText" class="styled-input" placeholder="水印文字" disabled>
+                                <div class="font-settings">
+                                    <div class="font-size-control">
+                                        <span>字体大小:</span>
+                                        <input type="number" id="watermarkSize" value="20" min="8" max="100" disabled>
+                                        <span>px</span>
+                                    </div>
+                                </div>
+                                <div class="color-picker">
+                                    <input type="color" id="watermarkColor" value="#000000" disabled>
+                                    <span>颜色</span>
+                                </div>
+                                <div class="opacity-control">
+                                    <span>水印透明度:</span>
+                                    <div class="opacity-slider">
+                                        <input type="range" id="watermarkOpacity" min="0" max="100" value="50" disabled>
+                                        <span id="opacityValue">50%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                <div class="action-buttons">
-                    <button id="compressBtn" class="btn-primary">
-                        <i class="ri-compress-line"></i> 开始压缩
-                    </button>
-                    <button id="downloadBtn" class="btn-success" style="display: none;">
-                        <i class="ri-download-line"></i> 下载图片
-                    </button>
-                    <button id="downloadAllBtn" class="btn-success" style="display: none;">
-                        <i class="ri-file-zip-line"></i> 打包下载全部
-                    </button>
+                        <div class="action-buttons">
+                            <button id="compressBtn" class="btn-primary">
+                                <i class="ri-compress-line"></i> 开始压缩
+                            </button>
+                            <button id="downloadBtn" class="btn-success" style="display: none;">
+                                <i class="ri-download-line"></i> 下载图片
+                            </button>
+                            <button id="downloadAllBtn" class="btn-success" style="display: none;">
+                                <i class="ri-file-zip-line"></i> 打包下载
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
