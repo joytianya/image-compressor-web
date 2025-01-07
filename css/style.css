@@ -63,7 +63,7 @@ body {
 
 .upload-area {
     border: 2px dashed var(--border-color);
-    padding: 3rem;
+    padding: 1rem;
     text-align: center;
     cursor: pointer;
     margin-bottom: 2rem;
@@ -74,19 +74,13 @@ body {
 }
 
 .upload-hint {
-    color: var(--text-light);
-    margin-bottom: 2rem;
+    width: 100%;
 }
 
 .upload-hint i {
     font-size: 3rem;
     color: var(--primary-color);
     margin-bottom: 1rem;
-}
-
-.upload-limits {
-    font-size: 0.9rem;
-    margin: 0.5rem 0 2rem 0;
 }
 
 .btn-primary, .btn-success {
@@ -104,8 +98,10 @@ body {
 .btn-primary {
     background-color: var(--primary-color);
     color: white;
-    font-size: 1.2rem;
-    padding: 1rem 2rem;
+    font-size: 1rem;
+    padding: 1rem;
+    width: 100%;
+    justify-content: center;
 }
 
 .btn-primary:hover {
@@ -432,20 +428,19 @@ input[type="range"]::-moz-range-thumb:hover {
 
 /* 上传区域紧凑样式 */
 .upload-area.compact {
-    padding: 1rem;
-    margin-bottom: 0;
+    padding: 0.8rem;
+    margin-bottom: 1rem;
 }
 
 .upload-area.compact .upload-hint {
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    margin: 0;
+    width: 100%;
+    justify-content: space-between;
 }
 
-.upload-area.compact .upload-limits {
-    margin: 0;
-    font-size: 0.8rem;
+.upload-area.compact .btn-primary {
+    font-size: 1rem;
+    width: 100%;
+    padding: 0.8rem;
 }
 
 /* 预览区域 */
@@ -714,4 +709,4 @@ input[type="range"]::-moz-range-thumb:hover {
 input[type="number"]:disabled {
     background-color: var(--bg-color);
     cursor: not-allowed;
-} 
+}
