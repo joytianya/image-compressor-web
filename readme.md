@@ -49,7 +49,7 @@
   - GitHub Pages提供在线访问
   - 持续集成自动部署
 
-### 本地运行
+## 🖥️ 本地运行
 1. 克隆仓库到本地：
    ```bash
    git clone https://github.com/your-username/image-compressor-web.git
@@ -65,13 +65,13 @@
    # 右键 index.html 选择 "Open with Live Server"
    ```
 
-🎨 使用说明
+## 🎨 使用说明
 	1.	打开网页，将图片拖拽或点击上传。
 	2.	输入目标分辨率（宽/高），或仅设置最大宽高，保持比例压缩。
 	3.	点击“压缩”按钮，等待几秒生成结果。
 	4.	预览压缩后的图片，并点击“下载”保存到本地。
 
-🧩 项目结构
+## 🧩 项目结构
 
 image-compressor-web/
 ├── index.html        // 主页面
@@ -80,20 +80,20 @@ image-compressor-web/
 ├── assets/           // 静态资源
 └── README.md         // 项目说明文档
 
-✨ 开发计划
+## ✨ 开发计划
 	•	图片上传与预览
 	•	自定义分辨率压缩
 	•	批量上传与压缩
 	•	添加水印与其他后期处理功能
 	•	国际化与多语言支持
 
-📜 许可证
+## 📜 许可证
 
 本项目基于 MIT License 开源，欢迎自由使用和修改。
 
-🤝 贡献指南
+## 🤝 贡献指南
 
-欢迎贡献代码或提出建议！
+## 欢迎贡献代码或提出建议！
 	1.	Fork 本仓库
 	2.	创建分支：git checkout -b feature/your-feature
 	3.	提交代码：git commit -m "Add your feature"
