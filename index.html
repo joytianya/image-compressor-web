@@ -5,24 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>图片压缩工具</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>在线图片压缩工具</h1>
-            <p>支持JPG、PNG等格式的图片压缩，可自定义长宽</p>
+    <div class="app-container">
+        <header class="app-header">
+            <div class="header-content">
+                <h1><i class="ri-image-edit-line"></i> 图片压缩工具</h1>
+                <p>轻松压缩、调整图片尺寸，支持批量处理</p>
+            </div>
         </header>
 
-        <main>
-            <div class="upload-area" id="dropZone">
-                <input type="file" id="fileInput" accept="image/*" hidden>
+        <main class="app-main">
+            <div class="upload-area card-shadow" id="dropZone">
+                <input type="file" id="fileInput" accept="image/*" multiple hidden>
                 <div class="upload-hint">
+                    <i class="ri-upload-cloud-2-line"></i>
                     <p>拖拽图片到这里 或 点击上传</p>
-                    <button id="uploadBtn">选择图片</button>
+                    <p class="upload-limits">支持 JPG、PNG、WebP 格式，单文件最大 10MB</p>
+                    <button id="uploadBtn" class="btn-primary">
+                        <i class="ri-image-add-line"></i> 选择图片
+                    </button>
                 </div>
             </div>
 
-            <div class="settings-panel" style="display: none;">
+            <div class="file-list card-shadow" id="fileList" style="display: none;">
+                <h3>待处理图片 (<span id="fileCount">0</span>)</h3>
+                <div class="file-items" id="fileItems"></div>
+            </div>
+
+            <div class="settings-panel card-shadow" style="display: none;">
                 <div class="image-preview">
                     <div class="original">
                         <h3>原图</h3>
@@ -36,42 +48,92 @@
                     </div>
                 </div>
 
-                <div class="compression-settings">
-                    <div class="size-settings">
-                        <h3>尺寸设置</h3>
-                        <div class="input-group">
-                            <label>
-                                宽度:
-                                <input type="number" id="widthInput" placeholder="像素">
-                            </label>
-                            <label>
-                                高度:
-                                <input type="number" id="heightInput" placeholder="像素">
-                            </label>
-                            <label>
-                                <input type="checkbox" id="keepRatio" checked>
-                                保持宽高比
-                            </label>
-                        </div>
+                <div class="format-settings">
+                    <h3>输出格式</h3>
+                    <div class="input-group">
+                        <select id="formatSelect">
+                            <option value="image/jpeg">JPG</option>
+                            <option value="image/png">PNG</option>
+                            <option value="image/webp">WebP</option>
+                        </select>
                     </div>
-
-                    <div class="quality-settings">
-                        <h3>质量设置</h3>
-                        <div class="input-group">
-                            <label>
-                                压缩质量:
-                                <input type="range" id="qualityInput" min="0" max="100" value="80">
-                                <span id="qualityValue">80%</span>
-                            </label>
-                        </div>
-                    </div>
-
-                    <button id="compressBtn">开始压缩</button>
-                    <button id="downloadBtn" style="display: none;">下载图片</button>
                 </div>
+
+                <div class="watermark-settings">
+                    <h3>水印设置</h3>
+                    <div class="input-group">
+                        <label>
+                            <input type="checkbox" id="enableWatermark">
+                            启用水印
+                        </label>
+                        <input type="text" id="watermarkText" placeholder="水印文字" disabled>
+                        <input type="color" id="watermarkColor" value="#000000" disabled>
+                        <input type="range" id="watermarkOpacity" min="0" max="100" value="50" disabled>
+                        <span id="opacityValue">50%</span>
+                    </div>
+                </div>
+
+                <div class="filter-settings">
+                    <h3>滤镜效果</h3>
+                    <div class="input-group">
+                        <select id="filterSelect">
+                            <option value="none">无</option>
+                            <option value="grayscale">黑白</option>
+                            <option value="sepia">复古</option>
+                            <option value="blur">模糊</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="size-settings">
+                    <h3>尺寸设置</h3>
+                    <div class="input-group">
+                        <label>
+                            宽度:
+                            <input type="number" id="widthInput" placeholder="像素">
+                        </label>
+                        <label>
+                            高度:
+                            <input type="number" id="heightInput" placeholder="像素">
+                        </label>
+                        <label>
+                            <input type="checkbox" id="keepRatio" checked>
+                            保持宽高比
+                        </label>
+                    </div>
+                </div>
+
+                <div class="quality-settings">
+                    <h3>质量设置</h3>
+                    <div class="input-group">
+                        <label>
+                            压缩质量:
+                            <input type="range" id="qualityInput" min="0" max="100" value="80">
+                            <span id="qualityValue">80%</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button id="compressBtn" class="btn-primary">
+                        <i class="ri-compress-line"></i> 开始压缩
+                    </button>
+                    <button id="downloadBtn" class="btn-success" style="display: none;">
+                        <i class="ri-download-line"></i> 下载图片
+                    </button>
+                    <button id="downloadAllBtn" class="btn-success" style="display: none;">
+                        <i class="ri-file-zip-line"></i> 打包下载全部
+                    </button>
+                </div>
+            </div>
+
+            <div class="loading-overlay" style="display: none;">
+                <div class="spinner"></div>
+                <p>正在处理中...</p>
             </div>
         </main>
     </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js"></script>
     <script src="js/main.js"></script>
 </body>
 </html> 
