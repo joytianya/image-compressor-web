@@ -27,12 +27,12 @@
   - HTML5 + CSS3 + JavaScript
   - Canvas API 用于图片压缩处理
 - **部署**：
-  - [GitHub Pages](https://joytianya.github.io/image-compressor-web/)（静态托管服务）
+  - [GitHub Pages](https://pages.github.com/)（静态托管服务）
 
 ## 🚀 快速开始
 
 ### 在线访问
-👉 [点击这里立即使用](https://github.com/joytianya/image-compressor-web)  
+👉 [点击这里立即使用](https://joytianya.github.io/image-compressor-web/)  
 
 ### 本地运行
 1. 克隆仓库：
