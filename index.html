@@ -39,85 +39,7 @@
 
                 <div class="right-panel card-shadow">
                     <div class="settings-panel">
-                        <h3 class="settings-title">压缩设置</h3>
-                        
-                        <div class="settings-group">
-                            <h4>输出格式</h4>
-                            <select id="formatSelect" class="styled-select">
-                                <option value="image/jpeg">JPG</option>
-                                <option value="image/png">PNG</option>
-                                <option value="image/webp">WebP</option>
-                            </select>
-                        </div>
-
-                        <div class="settings-group">
-                            <h4>尺寸设置</h4>
-                            <label class="checkbox-label">
-                                <input type="checkbox" id="enableResize">
-                                <span>启用尺寸调整</span>
-                            </label>
-                            <div class="dimension-inputs">
-                                <input type="number" id="widthInput" placeholder="宽度" disabled>
-                                <span>×</span>
-                                <input type="number" id="heightInput" placeholder="高度" disabled>
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="keepRatio" checked disabled>
-                                    <span>保持比例</span>
-                                </label>
-                            </div>
-                        </div>
-
-                        <div class="settings-group">
-                            <h4>压缩质量</h4>
-                            <div class="quality-control">
-                                <div class="quality-description">降低质量可以减小文件大小，但可能影响图片清晰度</div>
-                                <div class="quality-slider">
-                                    <input type="range" id="qualityInput" min="0" max="100" value="80">
-                                    <span id="qualityValue">80%</span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="settings-group">
-                            <h4>滤镜效果</h4>
-                            <select id="filterSelect" class="styled-select">
-                                <option value="none">无</option>
-                                <option value="grayscale">黑白</option>
-                                <option value="sepia">复古</option>
-                                <option value="blur">模糊</option>
-                            </select>
-                        </div>
-
-                        <div class="settings-group">
-                            <h4>水印设置</h4>
-                            <div class="watermark-controls">
-                                <label class="checkbox-label">
-                                    <input type="checkbox" id="enableWatermark">
-                                    <span>启用水印</span>
-                                </label>
-                                <input type="text" id="watermarkText" class="styled-input" placeholder="水印文字" disabled>
-                                <div class="font-settings">
-                                    <div class="font-size-control">
-                                        <span>字体大小:</span>
-                                        <input type="number" id="watermarkSize" value="20" min="8" max="100" disabled>
-                                        <span>px</span>
-                                    </div>
-                                </div>
-                                <div class="color-picker">
-                                    <input type="color" id="watermarkColor" value="#000000" disabled>
-                                    <span>颜色</span>
-                                </div>
-                                <div class="opacity-control">
-                                    <span>水印透明度:</span>
-                                    <div class="opacity-slider">
-                                        <input type="range" id="watermarkOpacity" min="0" max="100" value="50" disabled>
-                                        <span id="opacityValue">50%</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="action-buttons">
+                        <div class="action-buttons top-buttons">
                             <button id="compressBtn" class="btn-primary">
                                 <i class="ri-compress-line"></i> 开始压缩
                             </button>
@@ -127,6 +49,86 @@
                             <button id="downloadAllBtn" class="btn-success" style="display: none;">
                                 <i class="ri-file-zip-line"></i> 打包下载
                             </button>
+                        </div>
+
+                        <div class="settings-content">
+                            <h3 class="settings-title">压缩设置</h3>
+
+                            <div class="settings-group">
+                                <h4>输出格式</h4>
+                                <select id="formatSelect" class="styled-select">
+                                    <option value="image/jpeg">JPG</option>
+                                    <option value="image/png">PNG</option>
+                                    <option value="image/webp">WebP</option>
+                                </select>
+                            </div>
+
+                            <div class="settings-group">
+                                <h4>尺寸设置</h4>
+                                <label class="checkbox-label">
+                                    <input type="checkbox" id="enableResize">
+                                    <span>启用尺寸调整</span>
+                                </label>
+                                <div class="dimension-inputs">
+                                    <input type="number" id="widthInput" placeholder="宽度" disabled>
+                                    <span>×</span>
+                                    <input type="number" id="heightInput" placeholder="高度" disabled>
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="keepRatio" checked disabled>
+                                        <span>保持比例</span>
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h4>压缩质量</h4>
+                                <div class="quality-control">
+                                    <div class="quality-description">降低质量可以减小文件大小，但可能影响图片清晰度</div>
+                                    <div class="quality-slider">
+                                        <input type="range" id="qualityInput" min="0" max="100" value="80">
+                                        <span id="qualityValue">80%</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="settings-group">
+                                <h4>滤镜效果</h4>
+                                <select id="filterSelect" class="styled-select">
+                                    <option value="none">无</option>
+                                    <option value="grayscale">黑白</option>
+                                    <option value="sepia">复古</option>
+                                    <option value="blur">模糊</option>
+                                </select>
+                            </div>
+
+                            <div class="settings-group">
+                                <h4>水印设置</h4>
+                                <div class="watermark-controls">
+                                    <label class="checkbox-label">
+                                        <input type="checkbox" id="enableWatermark">
+                                        <span>启用水印</span>
+                                    </label>
+                                    <input type="text" id="watermarkText" class="styled-input" placeholder="水印文字" disabled>
+                                    <div class="font-settings">
+                                        <div class="font-size-control">
+                                            <span>字体大小:</span>
+                                            <input type="number" id="watermarkSize" value="20" min="8" max="100" disabled>
+                                            <span>px</span>
+                                        </div>
+                                    </div>
+                                    <div class="color-picker">
+                                        <input type="color" id="watermarkColor" value="#000000" disabled>
+                                        <span>颜色</span>
+                                    </div>
+                                    <div class="opacity-control">
+                                        <span>水印透明度:</span>
+                                        <div class="opacity-slider">
+                                            <input type="range" id="watermarkOpacity" min="0" max="100" value="50" disabled>
+                                            <span id="opacityValue">50%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
