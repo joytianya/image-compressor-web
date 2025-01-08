@@ -48,6 +48,26 @@ class ImageCompressor {
         // 初始化滑块背景
         this.updateRangeBackground(this.qualityInput);
         this.updateRangeBackground(this.watermarkOpacity);
+
+        // 初始化折叠面板
+        this.initCollapsiblePanels();
+    }
+
+    initCollapsiblePanels() {
+        const panels = document.querySelectorAll('.collapsible');
+        panels.forEach(panel => {
+            const header = panel.querySelector('.group-header');
+            header.addEventListener('click', () => {
+                // 关闭其他面板
+                panels.forEach(p => {
+                    if (p !== panel && p.classList.contains('active')) {
+                        p.classList.remove('active');
+                    }
+                });
+                // 切换当前面板
+                panel.classList.toggle('active');
+            });
+        });
     }
 
     bindEvents() {
@@ -126,6 +146,12 @@ class ImageCompressor {
             previewContainer.innerHTML = '';
         }
         
+        // 隐藏下载按钮
+        this.downloadBtn.style.display = 'none';
+        this.downloadAllBtn.style.display = 'none';
+        // 清除压缩后的blob
+        this.compressedBlob = null;
+
         files.forEach(file => {
             if (!this.supportedFormats.includes(file.type)) {
                 this.showError(`${file.name} 格式不支持，仅支持 JPG、PNG、WebP`);

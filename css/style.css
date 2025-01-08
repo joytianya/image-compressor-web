@@ -287,10 +287,8 @@ select:focus {
     }
 
     .settings-group {
-        margin-bottom: 1.2rem;
-        padding: 1rem;
-        background: var(--bg-color);
-        border-radius: var(--radius);
+        margin-bottom: 0.8rem;
+        background: white;
     }
 
     /* 输入控件优化 */
@@ -316,7 +314,7 @@ select:focus {
 
     /* 水印设置优化 */
     .watermark-controls {
-        gap: 1.2rem;
+        gap: 1.5rem;
     }
 
     .font-size-control {
@@ -328,7 +326,7 @@ select:focus {
         height: 44px;
     }
 
-    /* 底部固定压缩按钮 */
+    /* 底部固定按钮样式调整 */
     .top-buttons {
         position: fixed;
         bottom: 0;
@@ -336,14 +334,52 @@ select:focus {
         right: 0;
         background: white;
         padding: 1rem;
+        padding-bottom: env(safe-area-inset-bottom, 2rem);
         box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
         z-index: 100;
         margin: 0;
     }
 
-    /* 为固定按钮留出空间 */
+    /* 为底部按钮预留足够的空间 */
     .settings-panel {
-        padding-bottom: 80px;
+        padding-bottom: 250px;
+    }
+
+    /* 确保内容可以滚动 */
+    .settings-content {
+        overflow-y: auto;
+        max-height: none;
+        overflow: visible;
+        padding-bottom: 1rem;
+    }
+
+    /* 优化滚动体验 */
+    .settings-content::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    .settings-content::-webkit-scrollbar-track {
+        background: var(--bg-color);
+        border-radius: 3px;
+    }
+
+    .settings-content::-webkit-scrollbar-thumb {
+        background: var(--border-color);
+        border-radius: 3px;
+    }
+
+    /* 确保底部按钮始终可见且不透明 */
+    .top-buttons {
+        background: white;
+        border-top: 1px solid var(--border-color);
+    }
+
+    /* 调整按钮样式 */
+    .top-buttons .btn-primary,
+    .top-buttons .btn-success {
+        margin-bottom: 0.5rem;
+        height: auto;
+        min-height: 44px;
     }
 
     /* 优化触摸体验 */
@@ -361,6 +397,78 @@ select:focus {
         width: 40px;
         height: 40px;
         border-width: 4px;
+    }
+
+    /* 统一容器宽度 */
+    .left-panel,
+    .right-panel,
+    .upload-area,
+    .preview-section,
+    .settings-panel {
+        width: 100%;
+        max-width: 100%;
+        margin: 0 auto;
+        border-radius: var(--radius);
+    }
+
+    /* 折叠面板样式 */
+    .settings-group {
+        margin-bottom: 0.8rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius);
+        overflow: hidden;
+    }
+
+    .group-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background: white;
+        cursor: pointer;
+    }
+
+    .group-header h4 {
+        margin: 0;
+        font-size: 1rem;
+        color: var(--text-color);
+    }
+
+    .group-header i {
+        transition: transform 0.3s ease;
+    }
+
+    .group-content {
+        padding: 0;
+        max-height: 0;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        background: white;
+    }
+
+    .settings-group.active .group-content {
+        padding: 1rem 1rem 2rem;
+        max-height: none;
+    }
+
+    .settings-group.active .group-header i {
+        transform: rotate(180deg);
+    }
+
+    /* 优化水印控件在折叠面板中的样式 */
+    .watermark-controls {
+        gap: 1.5rem;
+    }
+
+    .watermark-controls .checkbox-label {
+        margin-bottom: 0.5rem;
+    }
+
+    .watermark-controls .styled-input,
+    .watermark-controls .font-size-control,
+    .watermark-controls .color-picker,
+    .watermark-controls .opacity-control {
+        margin-left: 0.5rem;
     }
 }
 
